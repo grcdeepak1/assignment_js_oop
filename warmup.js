@@ -29,14 +29,13 @@ function TestPerformance() {
   var protoAstroids = [];
   for (var i = 0; i < NUM_ASTROIDS; i++)
   {
-    protoAstroids[i] = new Astroid(i, i+1, i+2, i+3);
-  }
-  for (var i = 0; i < NUM_ASTROIDS; i++)
-  {
+    var x = Math.floor(Math.random() * 1000);
+    var y = Math.floor(Math.random() * 1000);
+    var vx = Math.floor(Math.random() * 100);
+    var vy = Math.floor(Math.random() * 100);
+    protoAstroids[i] = new Astroid(x, y, vx, vy);
     for (var j = 0; j < NUM_TICS; j++)
-    {
       protoAstroids[i].tic();
-    }
   }
   var prototypeEndDateTime = new Date();
 
@@ -44,14 +43,13 @@ function TestPerformance() {
   var nonProtoAstroids = [];
   for (var i = 0; i < NUM_ASTROIDS; i++)
   {
+    var x = Math.floor(Math.random() * 1000);
+    var y = Math.floor(Math.random() * 1000);
+    var vx = Math.floor(Math.random() * 100);
+    var vy = Math.floor(Math.random() * 100);
     nonProtoAstroids[i] = new Astroid(i, i+1, i+2, i+3);
-  }
-  for (var i = 0; i < NUM_ASTROIDS; i++)
-  {
     for (var j = 0; j < NUM_TICS; j++)
-    {
       nonProtoAstroids[i].tic();
-    }
   }
   var nonPrototypeEndDateTime = new Date();
 
