@@ -1,15 +1,4 @@
-.image {
-  width: 92px;
-  height: 130.328;
-}
-.col {
-  display: inline-block;
-}
-
-.faceup {
-  display: inline-block;
-}
-
-.facedown {
-  display: none;
+#board {
+  background-color: #333;
+  margin-left: 10px;
 }
