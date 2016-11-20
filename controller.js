@@ -14,6 +14,10 @@ APP.controller = {
       APP.view.renderSpaceship();
       APP.view.renderBullets();
       APP.model.clearBullets();
+      if (APP.model.shipCollidesWithAsteroid() === true) {
+        APP.view.gameOver();
+        clearInterval(gameTick);
+      }
     }, 100);
   },
 

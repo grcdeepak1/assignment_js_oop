@@ -15,6 +15,10 @@ APP.view = {
     this.attackKeyListener();
   },
 
+  gameOver: function() {
+    $('h2').html("Game Over");
+  },
+
   drawAsteroid: function(asteroid) {
     this.ctx().fillStyle = asteroid.paintColor;
     this.ctx().beginPath();

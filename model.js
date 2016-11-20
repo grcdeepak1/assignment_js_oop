@@ -3,7 +3,7 @@ var APP = APP || {};
 
 APP.model = {
   asteroids: [],
-  numAsteroids: 10,
+  numAsteroids: 5,
   bullets: [],
   spaceship: undefined,
   init: function() {
@@ -55,6 +55,16 @@ APP.model = {
         }
       })
     })
+  },
+
+  shipCollidesWithAsteroid: function() {
+    if (APP.model.asteroids.length === 0)
+      return true;
+    for(var i=0; i < APP.model.asteroids.length ; i++) {
+      if (APP.model.spaceship.hit(APP.model.asteroids[i]) === true) {
+        return true;
+      }
+    }
   }
 }
 
@@ -122,8 +132,21 @@ APP.model.Bullet.prototype.hit = function(asteroid) {
   var distance = Math.sqrt((bullet_x - asteroid_x) * (bullet_x - asteroid_x) + (bullet_y - asteroid_y) * (bullet_y - asteroid_y));
   if (distance <= asteroid.radius) {
     return true;
+  } else {
+    return false;
   }
 };
+
+APP.model.Spaceship.prototype.hit = function(asteroid) {
+  var ship_x = this.xCoordinate;
+  var ship_y = this.yCoordinate;
+  var asteroid_x = asteroid.xCoordinate;
+  var asteroid_y = asteroid.yCoordinate;
+  var distance = Math.sqrt((ship_x - asteroid_x) * (ship_x - asteroid_x) + (ship_y - asteroid_y) * (ship_y - asteroid_y));
+  if (distance <= asteroid.radius) {
+    return true;
+  }
+}
 
 APP.model.Asteroid.prototype.explode = function(index) {
   APP.model.asteroids.splice(index, 1);
