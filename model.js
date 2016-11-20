@@ -4,6 +4,7 @@ var APP = APP || {};
 APP.model = {
   asteroids: [],
   numAsteroids: 10,
+  bullets: [],
   spaceship: undefined,
   init: function() {
     APP.model.generateAstroids();
@@ -12,18 +13,36 @@ APP.model = {
 
   generateAstroids: function() {
     for(var i = 0 ; i < this.numAsteroids; i++) {
-      var xCoordinate = APP.model.myRandom(600);
-      var yCoordinate = APP.model.myRandom(400);
-      var xVelocity = APP.model.myRandom(6) - 3;
-      var yVelocity = APP.model.myRandom(6) - 3;
-      var radius = APP.model.myRandom(50, 10);
+      var xCoordinate = APP.helper.myRandom(600);
+      var yCoordinate = APP.helper.myRandom(400);
+      var xVelocity = APP.helper.myRandom(6) - 3;
+      var yVelocity = APP.helper.myRandom(6) - 3;
+      var radius = APP.helper.myRandom(50, 10);
       APP.model.asteroids.push(new APP.model.Asteroid(xCoordinate, yCoordinate, xVelocity, yVelocity, radius));
     }
   },
 
   generateSpaceship: function() {
     APP.model.spaceship = new APP.model.Spaceship(100, 200, 0, 0);
+  },
+
+  generateBullet: function() {
+    var ship = APP.model.spaceship;
+    var x = ship.xCoordinate;
+    var y = ship.yCoordinate;
+    var xVel = Math.sin(ship.direction / 180 * Math.PI) * 5;
+    var yVel = Math.cos(ship.direction / 180 * Math.PI) * -5;
+    var direction = ship.direction;
+    APP.model.bullets.push(new APP.model.Bullet(x, y, xVel, yVel, direction));
   }
+}
+
+APP.model.Bullet = function(xCoordinate, yCoordinate, xVelocity, yVelocity, direction) {
+  this.xCoordinate = xCoordinate;
+  this.yCoordinate = yCoordinate;
+  this.xVelocity = xVelocity;
+  this.yVelocity = yVelocity;
+  this.direction = direction;
 }
 
 //Spaceship
@@ -51,11 +70,11 @@ APP.model.Spaceship.prototype.rotate = function(direction) {
 APP.model.Spaceship.prototype.accelerate = function(positive) {
   var radians = (this.direction / 180) * Math.PI;
   if (positive) {
-    this.xVelocity += Math.sin(radians) * 1;
-    this.yVelocity -= Math.cos(radians) * 1;
+    this.xVelocity += Math.sin(radians) * 5;
+    this.yVelocity -= Math.cos(radians) * 5;
   } else {
-    this.xVelocity -= Math.sin(radians) * 1;
-    this.yVelocity += Math.cos(radians) * 1;
+    this.xVelocity -= Math.sin(radians) * 5;
+    this.yVelocity += Math.cos(radians) * 5;
   }
 };
 
@@ -81,12 +100,18 @@ APP.model.Asteroid.prototype.tic = function () {
 
 };
 
-APP.model.Spaceship.prototype.tic = APP.model.Asteroid.prototype.tic
+APP.model.Spaceship.prototype.tic = APP.model.Asteroid.prototype.tic;
+APP.model.Bullet.prototype.tic = function () {
+  this.xCoordinate += this.xVelocity;
+  this.yCoordinate += this.yVelocity;
+}
 
-APP.model.myRandom = function(maxNum, minNum) {
-  var random;
-  do {
-    random = Math.floor(Math.random() * maxNum);
-  } while(random < minNum)
-  return random;
+APP.helper =  {
+  myRandom: function(maxNum, minNum) {
+    var random;
+    do {
+      random = Math.floor(Math.random() * maxNum);
+    } while(random < minNum)
+    return random;
+  }
 }

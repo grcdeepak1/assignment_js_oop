@@ -9,8 +9,10 @@ APP.view = {
   init: function() {
     this.renderAsteroids();
     this.renderSpaceship();
+    this.renderBullets();
     this.directionKeyListener();
     this.thrusterKeyListener();
+    this.attackKeyListener();
   },
 
   drawAsteroid: function(asteroid) {
@@ -24,6 +26,40 @@ APP.view = {
     var anticlockwise = true;
     this.ctx().arc(x, y, radius, startAngle, endAngle, anticlockwise);
     this.ctx().fill();
+  },
+
+  drawBullet: function(bullet) {
+    var ctx = this.ctx();
+    var startX = bullet.xCoordinate;
+    var startY = bullet.yCoordinate;
+    var length = 10;
+    var rotation = bullet.direction / 180 * Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineWidth = 3;
+    ctx.lineTo(startX + Math.sin(rotation) * length, startY - Math.cos(rotation) * length);
+    ctx.strokeStyle = '#FFF';
+    ctx.stroke();
+  },
+
+  isOutOfBounds: function(bullet) {
+    if (bullet.xCoordinate < 0 || bullet.xCoordinate > 600 || bullet.yCoordinate < 0 || bullet.xCoordinate > 400 ) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  renderBullets: function() {
+    $.each(APP.model.bullets, function( index, bullet) {
+      if (bullet === undefined) {
+        return true;
+      } else if (APP.view.isOutOfBounds(bullet)) {
+        delete APP.model.bullets[index];
+        return true;
+      }
+      APP.view.drawBullet(bullet);
+    });
   },
 
   renderSpaceship: function() {
@@ -72,6 +108,14 @@ APP.view = {
          APP.model.spaceship.accelerate(true);
       } else if (e.keyCode == 40) {
          APP.model.spaceship.accelerate(false);
+      }
+    })
+  },
+
+  attackKeyListener: function() {
+    $(document).keydown( function(e) {
+      if (e.keyCode == 32) {
+         APP.model.generateBullet();
       }
     })
   }
