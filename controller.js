@@ -13,6 +13,7 @@ APP.controller = {
       APP.view.renderAsteroids();
       APP.view.renderSpaceship();
       APP.view.renderBullets();
+      APP.model.clearBullets();
     }, 100);
   },
 
@@ -27,9 +28,9 @@ APP.controller = {
   },
 
   moveBullets: function() {
+    APP.model.bulletCollidesWithAsteroid();
     $.each(APP.model.bullets, function( index, bullet) {
-      if (bullet !== undefined)
-        bullet.tic();
+      bullet.tic();
     });
   },
 

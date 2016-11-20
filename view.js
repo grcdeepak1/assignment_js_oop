@@ -42,22 +42,8 @@ APP.view = {
     ctx.stroke();
   },
 
-  isOutOfBounds: function(bullet) {
-    if (bullet.xCoordinate < 0 || bullet.xCoordinate > 600 || bullet.yCoordinate < 0 || bullet.xCoordinate > 400 ) {
-      return true;
-    } else {
-      return false;
-    }
-  },
-
   renderBullets: function() {
     $.each(APP.model.bullets, function( index, bullet) {
-      if (bullet === undefined) {
-        return true;
-      } else if (APP.view.isOutOfBounds(bullet)) {
-        delete APP.model.bullets[index];
-        return true;
-      }
       APP.view.drawBullet(bullet);
     });
   },
